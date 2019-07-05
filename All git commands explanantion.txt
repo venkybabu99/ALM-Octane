@@ -1,0 +1,402 @@
+
+You can view all of your settings and where they are coming from using:
+-->git config --list show--origin
+
+Now that your identity is set up, you can configure the default text editor that will be used when Git
+needs you to type in a message. If not configured, Git uses your system’s default editor.
+#######################################################################################################
+-->git config --global user.name "venky"
+-->git config --global user.email "venkybabu801@gmail.com"
+########################################################################################################
+If you want to check your configuration settings, you can use the git config --list command to list
+all the settings Git can find at that point:
+
+-->git config --list
+
+-->git init .........This creates a new subdirectory named .git that contains all of your necessary repository files 
+
+-->git add file1
+-->git add file2
+-->git commit -m "my first project"
+.............................................................................................
+CLONING  A RESPOSITORY
+
+-->git clone  https://github.com/libgit2/libgit2 :::If you want to get a copy of an existing Git repository —
+-------------------------------------------------------------------------------------------------------------------
+Remember that each file in your working directory can be in one of two states: tracked or
+untracked. Tracked files are files that were in the last snapshot; they can be unmodified, modified,
+or staged. In short, tracked files are files that Git knows about.
+Untracked files are everything else — any files in your working directory that were not in your last
+snapshot and are not in your staging area. When you first clone a repository, all of your files will be
+tracked and unmodified because Git just checked them out and you haven’t edited anything.
+######################################################################################################################
+CHECKING THE STATUS OF YOUR FILES
+
+-->git status
+default branch is always master branch
+#####################################################################################################################
+
+In order to begin tracking a new file, you use the command git add. To begin tracking the README
+file, you can run this:
+
+-->git add README
+
+-->$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+  new file: README
+  
+You can tell that it’s staged because it’s under the “Changes to be committed” heading.
+
+SHORT STATUS
+-->git status -s 
+............................................................
+$ git status -s
+ M README
+MM Rakefile
+A lib/git.rb
+M lib/simplegit.rb
+?? LICENSE.txt
+...........................................................
+IGNORING FILES
+
+Often, you’ll have a class of files that you don’t want Git to automatically add or even show you as
+being untracked. These are generally automatically generated files such as log files or files
+produced by your build system. In such cases, you can create a file listing patterns to match them
+named .gitignore
+............................................................................................................
+VIEWING STAGED AND UNSTAGED CHANGES
+
+you want to know exactly what you changed, not just which files were changed — you can use the "git diff" command.
+
+-->" git diff " ..That command compares what is in your working directory with what is in your staging area. The
+result tells you the changes you’ve made that you haven’t yet staged. 
+
+If you want to see what you’ve staged that will go into your next commit, you can use git diff
+--staged
+--" git diff --staged "
+........................................
+
+$ git diff --staged
+diff --git a/README b/README
+new file mode 100644
+index 0000000..03902a1
+--- /dev/null
++++ b/README
+@@ -0,0 +1 @@
++My Project
+.......................................
+COMMITING CHANGES
+
+--> " git commit -m "my first commit" "
+####################################################################################################
+Skipping the Staging Area
+
+--> " git commit -a -m  "my second commit "
+
+Adding the -a option to the git commit command makes
+Git automatically stage every file that is already tracked before doing the commit, letting you skip
+the git add part
+ 
+ #####################################################################################################
+ Removing Files
+ To remove a file from Git, you have to remove it from your tracked files (more accurately, remove it
+from your staging area) and then commit.If you simply remove the file from your working directory, it shows up under the “Changes not
+staged for commit” (that is, unstaged) area of your git status output:
+
+--> " git rm filename " 
+to remove file from staged area use command " git rm --cached filename "
+################################################################################################################
+Moving Files:
+--> " $ git mv file_from file_to "
+################################################################################################################
+
+Viewing the Commit History :
+
+After you have created several commits, or if you have cloned a repository with an existing commit
+history, you’ll probably want to look back to see what has happened
+
+--> " git log "
+
+One of the more helpful options is -p or --patch,
+ 
+ --> " git log -p -2 " shows only last 2 entries
+ --> "  git  log --stat "
+ --> " git log --oneline "
+ --> " git log full "
+ --> " git log --since="02-04-2019 "
+ --> " git log --after= "     " 
+ --> " git log --until="02-04-2019"
+ --> " git log --author="venky"
+ --> " git log --committer="venky"
+ --> " git log --grep=" hello"
+
+ ######################################################################################################################
+ 
+ Undoing Things:
+ At any stage, you may want to undo something
+ If you want to redo that commit, make the additional
+changes you forgot, stage them, and commit again using the --amend option:
+
+--> " git commit --amend " --This command takes your staging area and uses it for the commit
+
+As an example, if you commit and then realize you forgot to stage the changes in a file you wanted
+to add to this commit, you can do something like this:
+.......................................
+
+$ git commit -m 'initial commit'
+$ git add forgotten_file
+$ git commit --amend
+....................................
+
+###########################################################################################################################
+Unstaging a Staged File :
+
+let’s say you’ve changed two files and
+want to commit them as two separate changes, but you accidentally type git add * and stage them
+both. How can you unstage one of the two? The git status command reminds you:
+
+-->" git reset head filename "
+
+.........................................
+$ git add *
+$ git status
+On branch master
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+  renamed: README.md -> README
+  modified: CONTRIBUTING.md
+..................................................
+
+ $ git reset HEAD CONTRIBUTING.md
+Unstaged changes after reset:
+M CONTRIBUTING.md
+$ git status
+On branch master
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+  renamed: README.md -> README
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+  modified: CONTRIBUTING.md
+  
+............................................................
+#######################################################################################################
+Unmodifying a Modified File :
+What if you realize that you don’t want to keep your changes to the CONTRIBUTING.md file? How can
+you easily unmodify it — revert it back to what it looked like when you last committed 
+
+#####################################################################################################
+Working with Remotes:
+
+Remote repositories are versions of your project that are hosted on the Internet or
+network somewhere. You can have several of them, each of which generally is either read-only or
+read/write for you. Collaborating with others involves managing these remote repositories and
+pushing and pulling data to and from them when you need to share work. Managing remote
+repositories includes knowing how to add remote repositories, remove remotes that are no longer
+valid, manage various remote branches and define them as being tracked or not, and more
+
+SHOWING YOUR REMOTES:
+--> " git remote "
+--> " git remote -v " ..gives  lists of remote repositories with url's
+
+Adding Remote Repositories: git remote add <shortname> <url>:
+
+--> " git remote add proj1 url "
+Now you can use the string proj1 command line in lieu of the whole URL
+
+-->"git remote fetch proj1 "
+proj1 master branch is now accessible locally as proj1/master
+
+It’s important to note that the git fetch command only downloads
+the data to your local repository — it doesn’t automatically merge it with any of your work or
+modify what you’re currently working on
+
+Running GIT PULL generally fetches data from the server you originally cloned from and
+automatically tries to merge it into the code you’re currently working on.
+
+################################################################################################################
+PUSHING TO YOUR REMOTES :
+
+When you have your project at a point that you want to share, you have to push it upstream.
+
+--> " git push origin master "
+
+If you and someone else clone at the same time and they push
+upstream and then you push upstream, your push will rightly be rejected
+
+You’ll have to fetch their
+work first and incorporate it into yours before you’ll be allowed to push.
+
+INSPECTING A REMOTE:
+
+--> " git remote show "
+--> " git remote show origin " ..it will tells about the information about remote origin
+RENAMING AND REMOVING REMOTES:
+
+--> " git remote rename oldname newname "
+
+removing a remote 
+
+--> " git remote rm name " 
+
+TAGGING :
+
+people use this functionality to mark release points (v1.0, v2.0 and so on).
+
+--> " git tag " ..it will lists the tags
+--> " git tag -l "v1.8.5" "
+
+.............................................................
+$ git tag -l "v1.8.5*"
+v1.8.5
+v1.8.5-rc0
+v1.8.5-rc1
+v1.8.5-rc2
+v1.8.5-rc3
+v1.8.5.1
+v1.8.5.2
+v1.8.5.3
+v1.8.5.4
+v1.8.5.5
+.............................................................
+
+2 types of tags are there,light weight tags and Annotated tags 
+
+--> " git tag -a v1.0 -m " my version v1.4 " --this is annotated tag which gives full information of the tagger , mail id and created date
+
+--> " git show v1.0 " --displays the information about the versioned tag	
+
+--> " git tag v1.1 " ...light weight tag 
+
+Tagging Later:
+You can also tag commits after you’ve moved past them
+
+.................................................................
+$ git log --pretty=oneline
+15027957951b64cf874c3557a0f3547bd83b3ff6 Merge branch 'experiment'
+a6b4c97498bd301d84096da251c98a07c7723e65 beginning write support
+0d52aaab4479697da7686c15f77a3d64d9165190 one more thing
+6d52a271eda8725415634dd79daabbc4d9b6008e Merge branch 'experiment'
+0b7434d86859cc7b8c3d5e1dddfed66ff742fcbc added a commit function
+4682c3261057305bdd616e23b64b0857d832627b added a todo file
+166ae0c4d3f420721acbb115cc33848dfcc2121a started write support
+9fceb02d0ae598e95dc970b74767f19372d61af8 updated rakefile
+964f16d36dfccde844893cac5b347e7b3d44abbc commit the todo
+8a5cbc430f1a9c3d00faaeffd07798508422908a updated readme
+..................................................................
+
+--> " git tag -a v1.2 9fceb02 " 
+
+SHARING TAGS:
+By default, the git push command doesn’t transfer tags to remote servers.
+
+--> " git push origin tag-name " 
+
+--> " git push origin --tags " ..if we want to push numerous commands at a time
+
+DELETING TAGS:
+
+--> " git tag -d tag-name " ...to delete a tag
+--> " git push origin -d tagname " ... to delete remote tags 
+
+CHECKING OUT TAGS:
+
+--> " git checkout tag-name " ...
+
+############################################################################################################
+GIT ALIASES :
+
+$ git config --global alias.co checkout
+$ git config --global alias.br branch
+$ git config --global alias.ci commit
+$ git config --global alias.st status
+$ git config --global alias.unstage 'reset HEAD --'
+$ git unstage fileA
+$ git reset HEAD -- fileA
+$ git config --global alias.last 'log -1 HEAD'
+
+##############################################################################################################
+
+GIT BRANCHING:
+
+--> " git branch branch name "
+
+--> " git checkout branch name "
+
+--> " git log --oneline --decorate " ..shows where the branch pointers are pointing
+
+--> " git checkout -b new branch name " ..it will automatically creates new branch and swithces to  it
+
+when you are working on some issue suddenly an issue came in production and you have to do a hotfix at that time scenario will be like 
+
+first you should stash your curret work and move to the another branch to fix the issue
+
+--> " git checkout -b hotfix "
+
+ then switch to master branch and merge the hotfix branch
+
+ --> " git merge hotfix "
+ 
+ after fixing the issue delete the hot-fix branch because you no more need this branch
+ 
+ --> " git branch -d hotfix " 
+ 
+ Basic Merge Conflicts :
+  If you changed the same part of the same file differently in the two branches you’re merging, Git won’t be able to merge them cleanly
+ 
+merge conflict that looks something like this:
+.................................................................
+$ git merge iss53
+Auto-merging index.html
+CONFLICT (content): Merge conflict in index.html
+Automatic merge failed; fix conflicts and then commit the result.
+..................................................................
+
+If you want to use a graphical tool to resolve these issues, you can run git mergetool,
+
+--> " git mergetool "
+
+BRANCH MANAGEMENT
+
+--> " git branch " with no arguments it will lists all bracnhes we have
+
+--> " git branch -v " To see the last commit on each branch, you can run git branch -v
+
+--> " git branch --merged "     To see which branches are already merged into the branch you’re on,
+
+--> " git branch --no-merged "  To see all the branches that contain work you haven’t yet merged in,
+
+--> " git fetch origin branch-name "  to fetch origin branch
+
+--> " git push remote branch-name " to contribute your branch to remote 
+
+git fetch will only fetches the changes from the remote server that you don't have and will not change your working directory at all 
+ 
+But git  pull will automatically fetches the data followed by merging the data to the current branch we are working on.
+
+Deleting Remote Branches
+
+git push origin --delete serverfix
+
+########################################################################################################################
+
+REBASING :
+
+you can take the patch of the change that was introduced in C4 and reapply it on top of C3. In Git, this is called rebasing
+
+There is no difference in the end product of the integration, but rebasing makes for
+a cleaner history. If you examine the log of a rebased branch, it looks like a linear history: it
+appears that all the work happened in series, even when it originally happened in parallel.
+
+Rebasing replays changes from one line of work onto another in
+the order they were introduced, whereas merging takes the endpoints and merges them together.
+
+
+--> " git rebase --onto master server client " 
+
+
+

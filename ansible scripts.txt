@@ -1,0 +1,10 @@
+hosts:webservers
+vars:
+  date:"{{lookup('pipe','date+%Y%m%d-%H%M'}}"
+ tasks:
+  -name:taking jar file backup into /home/user/app/backup
+   copy: src=/home/user/apps/softwares/jboss-4.23.GA/server/hellowrod/deploy/web.jar
+     dest=/home/user/apps/backup/apps/software/web-{{date}}.war    remote_src=yes
+
+  -name=copying web.jar file into jboss server
+   copy:src={{item}} dest=/home/usr/apps/
